@@ -1,15 +1,12 @@
-
-
 const http = require("http");
 var path = require('path');
 const fs = require("fs");
 
 const server = http.createServer((req,res) => {
 
-
     console.log("url:", req.url);
 
-    const fileName = req.url === "/" ? req.url + "index.html" : req.url;
+    var fileName = req.url === "/" ? req.url + "index.html" : req.url;
 
     var extname = path.extname(fileName);
     var contentType = 'text/html';
@@ -31,13 +28,17 @@ const server = http.createServer((req,res) => {
             break;
     }
 
+    if (contentType === 'text/html') { // SPA
+        fileName = "index.html"
+    }
 
     fs.readFile("public/"+fileName, (err, body) =>{
 
-
         if (err) {
-            res.write("404");
             console.log("ERROR 404");
+            res.writeHead(404, { 'Content-Type': contentType });
+            res.end();
+            return;
         }
 
         res.writeHead(200, { 'Content-Type': contentType });

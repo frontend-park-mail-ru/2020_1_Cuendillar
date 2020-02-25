@@ -197,10 +197,7 @@ body, .page {
     flex-direction: column;
     align-items: center;
     justify-content: flex-start;
-
-
     background-repeat: no-repeat;
-
     background-position-y: bottom;
 }
 
@@ -221,7 +218,11 @@ body, .page {
 
 .profile_form {
     display: inline;
+    align-content: center;
     align-self: center;
     width: 450px;
 
+}
+.profile_form main input {
+    width: 500px;
 }
