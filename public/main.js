@@ -234,27 +234,31 @@ function createProfile() {
 }
 
 function showPage() {
-    var url = document.URL;
+    var url = window.location.pathname;
     console.log(url);
     switch (url) {  //@todo если нет сессии -> редирект на логин
         //@todo  add regular expr
-        case "http://localhost:3000/": {
+        case  "": {
             createMainPage();
             break;
         }
-        case "http://localhost:3000/index.html": {
+        case "/": {
             createMainPage();
             break;
         }
-        case "http://localhost:3000/registration.html": {
+        case "/index.html": {
+            createMainPage();
+            break;
+        }
+        case "/registration.html": {
             createRegistration();
             break;
         }
-        case "http://localhost:3000/login.html": {
+        case "/login.html": {
             createLogin();
             break;
         }
-        case "http://localhost:3000/profile.html": {
+        case "/profile.html": {
             createProfile();
             break;
         }
