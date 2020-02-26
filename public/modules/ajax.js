@@ -16,8 +16,9 @@
                         url = '/',
                         body = null,
                         callback = noop,
+                        async = true,
                     } = {}) => {
-            this._ajax({method: 'POST', url, body, callback});
+            this._ajax({method: 'POST', url, body, callback, async});
         };
 
         _ajax = ({
@@ -25,9 +26,10 @@
                      url = '/',
                      body = null,
                      callback = noop,
+                     async = true,
                  } = {}) => {
             const xhr = new XMLHttpRequest();
-            xhr.open(method, url, true);
+            xhr.open(method, url, async);
             xhr.withCredentials = true;
 
             xhr.addEventListener('readystatechange', function() {
@@ -41,10 +43,9 @@
                 xhr.send(JSON.stringify(body));
                 return;
             }
-
             xhr.send();
+        };
 
-        }
     }
 
     globalThis.AjaxModule = new AjaxModule();
