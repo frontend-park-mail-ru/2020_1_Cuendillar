@@ -45,7 +45,6 @@
             }
             xhr.send();
         };
-
     }
 
     globalThis.AjaxModule = new AjaxModule();

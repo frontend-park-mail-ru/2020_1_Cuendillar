@@ -1,4 +1,6 @@
-
+// echo
+// rest
+/// handle gorila
 console.log("start main js");
 
 const application = document.getElementById('application');
@@ -97,18 +99,20 @@ function createRegistration() {
         fromForm.password  = password;
         fromForm.email = email;
 
-        globalThis.AjaxModule.ajaxPost({
-            url: 'http://127.0.0.1:8080/registration', body: fromForm, callback: (status, response) =>
-            {
-                if (status === 200) {
-                    console.log("create profile! id:" + JSON.parse(response)["id"].toString(),
-                        "\t Hello,", JSON.parse(response)["login"]);
-                    createLogin();
-                } else { // 400 возрвщает если пользователь уже есть
-                    alert("Не удалось зарегистрироваться, пользователь с таким логином уже существует.");
-                }
-            }
+        fetch("http://127.0.0.1:8080/registration", {
+            method: 'post',
+            credentials: 'include',
+            mode: 'cors',
+            headers: {
+                "Content-type": "application/json; charset=UTF-8"
+            },
+            body: JSON.stringify(fromForm)
         })
+            .then(res => res.ok ? res : Promise.reject(res))
+            .then( response => createLogin() )
+            .catch(function (error) {
+                alert("Не удалось зарегистрироваться, пользователь с таким логином уже существует.");
+            });
     });
 }
 
@@ -165,25 +169,35 @@ function createLogin() {
         fromForm.email = email;
         fromForm.password  = password;
 
-        globalThis.AjaxModule.ajaxPost({
-            url: 'http://127.0.0.1:8080/signin', body: fromForm, callback: (status, response) =>
-            {
-                if (status === 200) {
-                    const answer = JSON.parse(response);
-                    globalThis.userData.id = answer.id;
-                    globalThis.userData.login = answer.login;
-                    globalThis.userData.email = answer.email;
-                    console.log("set GLOBAL USER LOGIN:", globalThis.userData.login);
-                    createMainPage()
-                } else {
-                    alert("Не удалось авторизоваться, неверная комбинация почта-пароль.");
-                    createLogin()
-                }
-            }
-        });
+        fetch("http://127.0.0.1:8080/signin", {
+            method: 'post',
+            credentials: 'include',
+            mode: 'cors',
+            headers: {
+                "Content-type": "application/json; charset=UTF-8"
+            },
+            body: JSON.stringify(fromForm)
+        })
+            .then(res => res.ok ? res : Promise.reject(res))
+            .then( response =>
+                response.json()
+            )
+            .then( result => {
+                globalThis.userData.id = result.id;
+                globalThis.userData.login = result.login;
+                globalThis.userData.email = result.email;
+                console.log("set GLOBAL USER LOGIN:", globalThis.userData.login);
+                createMainPage();
+            })
+            .catch(function (error) {
+                console.log("some signIN err");
+                alert("Не удалось авторизоваться, неверная комбинация почта-пароль.");
+                createLogin();
+            });
         application.innerHTML  =' Загрузка... ';
     });
 }
+
 
 function showHeaderAndSideBar() {
     application.innerHTML =`
@@ -230,21 +244,30 @@ function showHeaderAndSideBar() {
     const logoutLink = document.getElementById("logoutLink");
     logoutLink.addEventListener("click", function(e) {
         e.preventDefault();
-
-        globalThis.AjaxModule.ajaxPost({
-            url: 'http://127.0.0.1:8080/logout', body: null, callback: (status, response) =>
-            {
-                if (status === 200) {
+        fetch("http://127.0.0.1:8080/logout", {
+            method: 'post',
+            credentials: 'include',
+            mode: 'cors',
+            headers: {
+                "Content-type": "application/json; charset=UTF-8"
+            },
+            body: null
+        })
+            .then(res => res.ok ? res : Promise.reject(res))
+            .then( response =>
+                {
                     globalThis.userData.email = null;
                     globalThis.userData.login = null;
                     globalThis.userData.id = null;
                     createLogin();
-                } else {
-                    alert("logout err");
-                    createLogin();
                 }
-            }
-        })
+            )
+            .catch(function (error) {
+                alert("logout err");
+                createLogin();
+            });
+
+
     });
 
 }
@@ -296,6 +319,15 @@ function createMainPage() {
     });
 }
 
+function setUserData(response) {
+    const answer = JSON.parse(response);
+    globalThis.userData.id = answer.id;
+    globalThis.userData.login = answer.login;
+    globalThis.userData.email = answer.email;
+    console.log("set GLOBAL USER LOGIN:", globalThis.userData.login);
+    createMainPage();
+}
+
 function createProfile() {
     setLocation("/profile.html");
     showHeaderAndSideBar();
@@ -310,13 +342,21 @@ function createProfile() {
                 <input id="profilePass" name="ProfPass" value="" type="password"  placeholder="Сменить пароль">
                 <input id="profilePassRep" name="repProfPass" value="" type="password" placeholder="Повторите новый пароль">
                 <input id="profileEmail" type="newemail" value="${globalThis.userData.email}" placeholder="email">
-                <img class="profile_avatar" src="assets/logoBadFront.png">
-                <input type="file" name="f">
             </main>
             <footer>
                 <button type="submit">Сохранить</button>
             </footer>
         </form>
+        
+        <form id = "profileFormAvatar" class="profile_form" enctype="multipart/form-data">
+        <header>
+               <h2>Изменение аватара</h2>
+            </header>
+              <img class="profile_avatar" src="assets/logoBadFront.png">
+              <input type="file" name="avatar">
+         <button type="submit">Сохранить аватар</button>
+        
+</form>
 `;
     const profileForm = document.getElementById("profileForm");
     const profilePassword = document.getElementById('profilePass');
@@ -343,22 +383,42 @@ function createProfile() {
         var fromForm = new Object();
         fromForm.password  = password;
         fromForm.email = email;
-        globalThis.AjaxModule.ajaxPost({
-            url: 'http://127.0.0.1:8080/changeprofile', body: fromForm, callback: (status, response) =>
-            {
-                if (status === 200) {
-                    const answer = JSON.parse(response);
-                    globalThis.userData.id = answer.id;
-                    globalThis.userData.login = answer.login;
-                    globalThis.userData.email = answer.email;
-                    console.log("set GLOBAL USER LOGIN:", globalThis.userData.login);
-                    createMainPage();
-                } else {
-                    alert("Не удалось изменить профиль.");
-                }
-            }
-        });
+
+        fetch("http://127.0.0.1:8080/changeprofile", {
+            method: 'post',
+            credentials: 'include',
+            mode: 'cors',
+            headers: {
+                "Content-type": "application/json; charset=UTF-8"
+            },
+            body: JSON.stringify(fromForm)
+        })
+            .then(res => res.ok ? res : Promise.reject(res))
+            .then( response =>
+                response.json()
+            )
+            .then( result => {
+                globalThis.userData.id = result.id;
+                globalThis.userData.login = result.login;
+                globalThis.userData.email = result.email;
+                console.log("set GLOBAL USER LOGIN:", globalThis.userData.login);
+                createMainPage();
+            })
+            .catch(function (error) {
+                alert("Не удалось изменить профиль.");
+            });
         createMainPage()
+    });
+
+    const profileFormAvatar = document.getElementById("profileFormAvatar");
+    profileFormAvatar.addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        var formData = new FormData(profileFormAvatar);
+
+
+
+
     });
 }
 
@@ -388,32 +448,36 @@ function createOneTask() {
 
 function getUserDataByCookie(createFunction = createLogin()) {
 
-    var creatFunc = (status, response) =>
-    {
-        if (status === 200) {
-            const answer = JSON.parse(response);
-            if (answer.status === false)
-                return false;
-            globalThis.userData.id = answer.id;
-            globalThis.userData.login = answer.login;
-            globalThis.userData.email = answer.email;
+    fetch("http://127.0.0.1:8080/getuser", {
+        method: 'post',
+        credentials: 'include',
+        mode: 'cors',
+        headers: {
+            "Content-type": "application/json; charset=UTF-8"
+        },
+        body: null
+    })
+        .then(res => res.ok ? res : Promise.reject(res))
+        .then( response =>
+            response.json()
+        )
+        .then( result => {
+            globalThis.userData.id = result.id;
+            globalThis.userData.login = result.login;
+            globalThis.userData.email = result.email;
             console.log("set GLOBAL USER LOGIN get user:", globalThis.userData.login);
 
             if (createFunction === undefined) { // почему undefined ? если перезагружаюсь с index.html
-                showPage();
-                console.log("show page:", window.location.pathname);
+                console.log("err: why show page:", window.location.pathname);
+                createMainPage();
                 return;
             }
-
             createFunction();
-        } else {
+        })
+        .catch(function (error) {
             createLogin();
-        }
-    };
+        });
 
-    globalThis.AjaxModule.ajaxPost({
-        url: 'http://127.0.0.1:8080/getuser', body: null, callback: creatFunc });
-    console.log("set dowload");
     application.innerHTML = "Загрузка...";
 }
 
