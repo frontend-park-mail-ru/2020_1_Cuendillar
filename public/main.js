@@ -24,7 +24,12 @@ function setLocation(curLoc){
 
 
 function checkRegistrationForm(registrationLogin, registrationPassword, registrationPasswordRep, registrationEmail) {
-    return registrationPassword === registrationPasswordRep;
+    return registrationPassword === registrationPasswordRep &&  registrationPassword.length > 4;
+    //@todo add check symbols in login, strong of password ...
+}
+
+function checkProfileForm(email, password, passwordRep) {
+    return password === passwordRep;
     //@todo add check symbols in login, strong of password ...
 }
 
@@ -296,23 +301,65 @@ function createProfile() {
     showHeaderAndSideBar();
     const mainContent = document.getElementsByClassName("main_content")[0];
     mainContent.innerHTML = `
-    <form class="profile_form">
+    <form   id = "profileForm" class="profile_form">
             <header>
                 <h2>Настройки профиля</h2>
             </header>
             <main>
                 <h3> login:"${globalThis.userData.login}"</h3>
-                <input name="ProfPass" value="" type="password"  placeholder="Сменить пароль">
-                <input name="repProfPass" value="" type="password" placeholder="Повторите новый пароль">
-                <input type="newemail" value="${globalThis.userData.email}" placeholder="email">
+                <input id="profilePass" name="ProfPass" value="" type="password"  placeholder="Сменить пароль">
+                <input id="profilePassRep" name="repProfPass" value="" type="password" placeholder="Повторите новый пароль">
+                <input id="profileEmail" type="newemail" value="${globalThis.userData.email}" placeholder="email">
                 <img class="profile_avatar" src="assets/logoBadFront.png">
                 <input type="file" name="f">
             </main>
             <footer>
-                <button disabled>Сохранить</button>
+                <button type="submit">Сохранить</button>
             </footer>
         </form>
 `;
+    const profileForm = document.getElementById("profileForm");
+    const profilePassword = document.getElementById('profilePass');
+    const profilePasswordRep = document.getElementById('profilePassRep');
+    const profileEmail = document.getElementById('profileEmail');
+
+    profileForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        var password = profilePassword.value.trim();
+        const passwordRep = profilePasswordRep.value.trim();
+        const email = profileEmail.value.trim();
+
+        if  (!checkProfileForm(email, password, passwordRep)) {
+            alert("Пароли должны совпадать и быть > 4.");
+            return;
+        }
+
+        if (password.length === 0) {
+            password = ""
+        }
+        console.log("profile: try send:", password, email);
+
+        var fromForm = new Object();
+        fromForm.password  = password;
+        fromForm.email = email;
+        globalThis.AjaxModule.ajaxPost({
+            url: 'http://127.0.0.1:8080/changeprofile', body: fromForm, callback: (status, response) =>
+            {
+                if (status === 200) {
+                    const answer = JSON.parse(response);
+                    globalThis.userData.id = answer.id;
+                    globalThis.userData.login = answer.login;
+                    globalThis.userData.email = answer.email;
+                    console.log("set GLOBAL USER LOGIN:", globalThis.userData.login);
+                    createMainPage();
+                } else {
+                    alert("Не удалось изменить профиль.");
+                }
+            }
+        });
+        createMainPage()
+    });
 }
 
 function createOneTask() {
