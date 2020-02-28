@@ -1,8 +1,9 @@
 import {showHeaderAndSideBar, createMainPage} from "./createMainPage.js"
-import {FetchModule} from "../modules/fetchCases.js"
+import {setLocation} from "./setLocate.js"
+import {FetchRequests} from "../modules/fetchRequests.js";
 
 export function createProfile() {
-    globalThis.CreatorModule.setLocation("/profile.html");
+    setLocation("/profile.html", "Profile");
     showHeaderAndSideBar();
     const mainContent = document.getElementsByClassName("main_content")[0];
     mainContent.innerHTML = `
@@ -27,7 +28,7 @@ export function createProfile() {
             </header>
               <img class="profile_avatar" src="assets/logoBadFront.png">
               <input type="file" name="avatar">
-         <button type="submit">Сохранить аватар</button>
+         <button  disabled ="submit">Сохранить аватар</button>
         
 </form>
 `;
@@ -43,7 +44,12 @@ export function createProfile() {
         const passwordRep = profilePasswordRep.value.trim();
         const email = profileEmail.value.trim();
 
-        if  (!globalThis.CreatorModule.checkProfileForm(email, password, passwordRep)) {
+        function checkProfileForm(email, password, passwordRep) {
+            return password === passwordRep;
+            //@todo add check symbols in login, strong of password ...
+        }
+
+        if  (!checkProfileForm(email, password, passwordRep)) {
             alert("Пароли должны совпадать и быть > 4.");
             return;
         }
@@ -57,7 +63,7 @@ export function createProfile() {
         fromForm.password  = password;
         fromForm.email = email;
 
-        FetchModule.ChangeProfile(fromForm);
+        FetchRequests.ChangeProfile(fromForm);
 
         createMainPage();
     });
@@ -69,6 +75,9 @@ export function createProfile() {
         var formData = new FormData(profileFormAvatar);
 
         // avatar send fetch here
+        //@todo avatar + go avatar
+        // отправить новую аватарку и перед этим сохранить её в локальном хранилище
+        //@todo запросить аватарку если её нет в локальном хранилище
 
     });
 }

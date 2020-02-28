@@ -1,6 +1,8 @@
 import {createProfile} from "./createProfile.js"
 import {createOneTask} from "./createOneTask.js"
-import {FetchModule} from "../modules/fetchCases.js"
+import {setLocation} from "./setLocate.js"
+import {FetchRequests} from "../modules/fetchRequests.js"
+
 
 export function showHeaderAndSideBar() {
     application.innerHTML =`
@@ -48,13 +50,13 @@ export function showHeaderAndSideBar() {
     logoutLink.addEventListener("click", function(e) {
         e.preventDefault();
 
-        FetchModule.LogOut();
+        FetchRequests.LogOut();
     });
 }
 
 
 export function createMainPage() {
-    globalThis.CreatorModule.setLocation("/index.html");
+    setLocation("/index.html", "Main");
     showHeaderAndSideBar();
     const mainContent = document.getElementsByClassName("main_content")[0];
     mainContent.innerHTML = `

@@ -1,9 +1,10 @@
 import {createRegistration} from "./createRegistration.js"
-import {FetchModule} from "../modules/fetchCases.js"
+import {setLocation} from "./setLocate.js"
+import {FetchRequests} from "../modules/fetchRequests.js"
 
 export function createLogin() {
     console.log("CREATE LOGIN!");
-    globalThis.CreatorModule.setLocation("/login.html");
+    setLocation("/login.html", "Login");
     application.innerHTML =`
 <div class="page">
     <header>
@@ -14,7 +15,7 @@ export function createLogin() {
             <h2>Авторизация</h2>
         </header>
         <main>
-            <input id="loginEmail" type="email" placeholder="Логин">
+            <input id="loginEmail" type="email" placeholder="Почта">
             <input id="loginPassword" type="password" placeholder="Пароль">
         </main>
         <footer>
@@ -55,7 +56,7 @@ export function createLogin() {
         fromForm.email = email;
         fromForm.password  = password;
 
-        FetchModule.SignInForm(fromForm);
+        FetchRequests.SignInForm(fromForm);
 
         application.innerHTML  =' Загрузка... ';
     });

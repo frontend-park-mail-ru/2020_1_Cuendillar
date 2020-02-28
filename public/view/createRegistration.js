@@ -1,7 +1,9 @@
-import {FetchModule} from "../modules/fetchCases.js"
+import {setLocation} from "./setLocate.js"
+import {createLogin} from "./createlogin.js"
+import {FetchRequests} from "../modules/fetchRequests.js"
 
 export function createRegistration() {
-    globalThis.CreatorModule.setLocation("/registration.html");
+    setLocation("/registration.html", "Registration");
     application.innerHTML = `<div class="page">
     <header>
         <img class="littleLogo" src="assets/logoBadFront.png" alt="">
@@ -51,7 +53,12 @@ export function createRegistration() {
         const passwordRep = registrationPasswordRep.value.trim();
         const email = registrationEmail.value.trim();
 
-        if  (! globalThis.CreatorModule.checkRegistrationForm(login, password,
+        function checkRegistrationForm(registrationLogin, registrationPassword, registrationPasswordRep, registrationEmail) {
+            return registrationPassword === registrationPasswordRep &&  registrationPassword.length > 4;
+            //@todo add check symbols in login, strong of password ...
+        }
+
+        if  (!checkRegistrationForm(login, password,
             passwordRep, email)) {
             alert("Пароли должны совпадать.");
             return;
@@ -63,7 +70,7 @@ export function createRegistration() {
         fromForm.password  = password;
         fromForm.email = email;
         console.log("CREATE!");
-        FetchModule.RegistrationForm(fromForm)
+        FetchRequests.RegistrationForm(fromForm);
 
     });
 }

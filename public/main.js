@@ -7,11 +7,11 @@ import  {createRegistration} from "./view/createRegistration.js"
 import  {createMainPage} from "./view/createMainPage.js"
 import  {createProfile} from "./view/createProfile.js"
 import  {createOneTask} from "./view/createOneTask.js"
-import {FetchModule} from "./modules/fetchCases.js"
+import {FetchRequests} from "./modules/fetchRequests.js"
 
-console.log("start main js");
 
 const application = document.getElementById('application');
+
 
 globalThis.userData = {
     id: -1,
@@ -19,11 +19,8 @@ globalThis.userData = {
     email: "email"
 };
 
-
 function getUserDataByCookieBeforeCreate(createFunction = createLogin()) {
-
-    FetchModule.GetUserByCookie(createFunction);
-
+    FetchRequests.GetUserByCookie(createFunction);
     application.innerHTML = "Загрузка...";
 }
 

@@ -1,7 +1,8 @@
 import  {showHeaderAndSideBar} from "../view/createMainPage.js"
+import {setLocation} from "./setLocate.js"
 
 export function createOneTask() {
-    globalThis.CreatorModule.setLocation("/onetask.html");
+    setLocation("/onetask.html", "Task");
     showHeaderAndSideBar();
     const mainContent = document.getElementsByClassName("main_content")[0];
     mainContent.innerHTML = `
