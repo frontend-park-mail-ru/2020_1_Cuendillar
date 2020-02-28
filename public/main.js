@@ -1,6 +1,13 @@
 // echo
 // rest
-/// handle gorila
+// handle gorila
+
+import {createLogin} from "./view/createlogin.js"
+import  {createRegistration} from "./view/createRegistration.js"
+import  {createMainPage} from "./view/createMainPage.js"
+import  {createProfile} from "./view/createProfile.js"
+import  {createOneTask} from "./view/createOneTask.js"
+import {FetchModule} from "./modules/fetchCases.js"
 
 console.log("start main js");
 
@@ -13,9 +20,9 @@ globalThis.userData = {
 };
 
 
-function getUserDataByCookieBeforeCreate(createFunction = globalThis.CreatorModule.createLogin()) {
+function getUserDataByCookieBeforeCreate(createFunction = createLogin()) {
 
-    globalThis.FetchModule.GetUserByCookie(createFunction);
+    FetchModule.GetUserByCookie(createFunction);
 
     application.innerHTML = "Загрузка...";
 }
@@ -26,36 +33,36 @@ function showPage() {
     switch (url) {
         //@todo  add regular expr
         case  "": {
-            getUserDataByCookieBeforeCreate(globalThis.CreatorModule.createMainPage());
+            getUserDataByCookieBeforeCreate(createMainPage());
             break;
         }
         case "/": {
-            getUserDataByCookieBeforeCreate(globalThis.CreatorModule.createMainPage());
+            getUserDataByCookieBeforeCreate(createMainPage());
             break;
         }
         case "/index.html": {
             console.log("reload index");
-            getUserDataByCookieBeforeCreate(globalThis.CreatorModule.createMainPage());
+            getUserDataByCookieBeforeCreate(createMainPage());
             break;
         }
         case "/registration.html": {
-            globalThis.CreatorModule.createRegistration();
+            createRegistration();
             break;
         }
         case "/login.html": {
-            globalThis.CreatorModule.createLogin();
+            createLogin();
             break;
         }
         case "/profile.html": {
-            getUserDataByCookieBeforeCreate(globalThis.CreatorModule.createProfile());
+            getUserDataByCookieBeforeCreate(createProfile());
             break;
         }
         case "/onetask.html": {
-            getUserDataByCookieBeforeCreate(globalThis.CreatorModule.createOneTask());
+            getUserDataByCookieBeforeCreate(createOneTask());
             break;
         }
         default:{
-            getUserDataByCookieBeforeCreate(globalThis.CreatorModule.createMainPage());
+            getUserDataByCookieBeforeCreate(createMainPage());
         }
         //@todo add one task page
     }
