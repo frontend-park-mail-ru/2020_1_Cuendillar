@@ -2,67 +2,78 @@
 // rest
 // handle gorila
 
-import {createLogin} from "./view/createlogin.js"
-import  {createRegistration} from "./view/createRegistration.js"
-import  {createMainPage} from "./view/createMainPage.js"
-import  {createProfile} from "./view/createProfile.js"
-import  {createOneTask} from "./view/createOneTask.js"
-import {FetchRequests} from "./modules/fetchRequests.js"
+import {createLogin} from './view/createLogin.js';
+import {createRegistration} from './view/createRegistration.js';
+import {createMainPage} from './view/createMainPage.js';
+import {createProfile} from './view/createProfile.js';
+import {createOneTask} from './view/createOneTask.js';
+import {FetchRequests} from './modules/fetchRequests.js';
 
 
 const application = document.getElementById('application');
 
 
 globalThis.userData = {
-    id: -1,
-    login:"login",
-    email: "email"
+  id: -1,
+  login: 'login',
+  email: 'email',
 };
 
+/**
+ *  gat user bo cookie and show "download" before page show
+ *
+ * @param {function} createFunction - function that can create page
+ * @return {void}
+ */
 function getUserDataByCookieBeforeCreate(createFunction = createLogin()) {
-    FetchRequests.GetUserByCookie(createFunction);
-    application.innerHTML = "Загрузка...";
+  FetchRequests.getUserByCookie(createFunction);
+  application.innerHTML = 'Загрузка...';
 }
 
+/**
+ *  router
+ *
+ * @return {void}
+ */
 function showPage() {
-    var url = window.location.pathname;
-    console.log(url);
-    switch (url) {
-        //@todo  add regular expr
-        case  "": {
-            getUserDataByCookieBeforeCreate(createMainPage());
-            break;
-        }
-        case "/": {
-            getUserDataByCookieBeforeCreate(createMainPage());
-            break;
-        }
-        case "/index.html": {
-            console.log("reload index");
-            getUserDataByCookieBeforeCreate(createMainPage());
-            break;
-        }
-        case "/registration.html": {
-            createRegistration();
-            break;
-        }
-        case "/login.html": {
-            createLogin();
-            break;
-        }
-        case "/profile.html": {
-            getUserDataByCookieBeforeCreate(createProfile());
-            break;
-        }
-        case "/onetask.html": {
-            getUserDataByCookieBeforeCreate(createOneTask());
-            break;
-        }
-        default:{
-            getUserDataByCookieBeforeCreate(createMainPage());
-        }
-        //@todo add one task page
+  const url = window.location.pathname;
+  console.log(url);
+  switch (url) {
+    // @todo  add regular expr
+    case '': {
+      getUserDataByCookieBeforeCreate(createMainPage());
+      break;
     }
+    case '/': {
+      getUserDataByCookieBeforeCreate(createMainPage());
+      break;
+    }
+    case '/index.html': {
+      console.log('reload index');
+      getUserDataByCookieBeforeCreate(createMainPage());
+      break;
+    }
+    case '/registration.html': {
+      createRegistration();
+      break;
+    }
+    case '/login.html': {
+      createLogin();
+      break;
+    }
+    case '/profile.html': {
+      getUserDataByCookieBeforeCreate(createProfile());
+      break;
+    }
+    case '/onetask.html': {
+      getUserDataByCookieBeforeCreate(createOneTask());
+      break;
+    }
+    default: {
+      getUserDataByCookieBeforeCreate(createMainPage());
+    }
+        // @todo add one task page
+  }
 }
 
 

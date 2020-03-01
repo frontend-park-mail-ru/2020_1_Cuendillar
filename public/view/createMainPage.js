@@ -1,12 +1,17 @@
-import {createProfile} from "./createProfile.js"
-import {createOneTask} from "./createOneTask.js"
-import {setLocation} from "./setLocate.js"
-import {FetchRequests} from "../modules/fetchRequests.js"
-import {getRandomAvatarPath} from "./createProfile.js"
+import {createProfile} from './createProfile.js';
+import {createOneTask} from './createOneTask.js';
+import {setLocation} from './setLocate.js';
+import {FetchRequests} from '../modules/fetchRequests.js';
+import {getRandomAvatarPath} from './createProfile.js';
 
+/**
+ *  show header
+ *
+ * @return {void}
+ */
 export function showHeaderAndSideBar() {
-    var avatarPath = getRandomAvatarPath();
-    application.innerHTML =`
+  const avatarPath = getRandomAvatarPath();
+  application.innerHTML =`
 
     <header class="main_header">
    
@@ -44,30 +49,34 @@ export function showHeaderAndSideBar() {
     </aside>
     `;
 
-    const linkMainPage = document.getElementById("linkMainPage");
-    linkMainPage.addEventListener("click", function(e) {
-        e.preventDefault();
-        createMainPage();
-    });
-    const profileMainLink = document.getElementById("profileMainLink");
-    profileMainLink.addEventListener("click", function(e) {
-        e.preventDefault();
-        createProfile();
-    });
-    const logoutLink = document.getElementById("logoutLink");
-    logoutLink.addEventListener("click", function(e) {
-        e.preventDefault();
+  const linkMainPage = document.getElementById('linkMainPage');
+  linkMainPage.addEventListener('click', function(e) {
+    e.preventDefault();
+    createMainPage();
+  });
+  const profileMainLink = document.getElementById('profileMainLink');
+  profileMainLink.addEventListener('click', function(e) {
+    e.preventDefault();
+    createProfile();
+  });
+  const logoutLink = document.getElementById('logoutLink');
+  logoutLink.addEventListener('click', function(e) {
+    e.preventDefault();
 
-        FetchRequests.LogOut();
-    });
+    FetchRequests.logOut();
+  });
 }
 
-
+/**
+ *  show mainPage
+ *
+ * @return {void}
+ */
 export function createMainPage() {
-    setLocation("/index.html", "Main");
-    showHeaderAndSideBar();
-    const mainContent = document.getElementsByClassName("main_content")[0];
-    mainContent.innerHTML = `
+  setLocation('/index.html', 'Main');
+  showHeaderAndSideBar();
+  const mainContent = document.getElementsByClassName('main_content')[0];
+  mainContent.innerHTML = `
 <div class="container">
   <img class="avatarTask" src="assets/logoBadFront.png" alt="Avatar">
   <a id="task1" href="#">
@@ -93,20 +102,20 @@ export function createMainPage() {
   <p>Task little text Task little text Task little text.</p>
 </div>
 `;
-    const task1 = document.getElementById("task1");
-    task1.addEventListener("click", function(e) {
-        e.preventDefault();
-        createOneTask();
-    });
-    const task2 = document.getElementById("task2");
-    task2.addEventListener("click", function(e) {
-        e.preventDefault();
-        createOneTask();
-    });
-    const task3 = document.getElementById("task3");
-    task3.addEventListener("click", function(e) {
-        e.preventDefault();
-        createOneTask();
-    });
+  const task1 = document.getElementById('task1');
+  task1.addEventListener('click', function(e) {
+    e.preventDefault();
+    createOneTask();
+  });
+  const task2 = document.getElementById('task2');
+  task2.addEventListener('click', function(e) {
+    e.preventDefault();
+    createOneTask();
+  });
+  const task3 = document.getElementById('task3');
+  task3.addEventListener('click', function(e) {
+    e.preventDefault();
+    createOneTask();
+  });
 }
 
