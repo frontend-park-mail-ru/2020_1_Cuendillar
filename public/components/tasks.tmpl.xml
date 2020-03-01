@@ -1,0 +1,28 @@
+<fest:template xmlns:fest="http://fest.mail.ru" context_name="data">
+
+<fest:for iterate="data" index="i" value="v">
+
+<div class="container">
+    <img class="avatarTask" src="assets/logoBadFront.png" alt="Avatar"> </img>
+    <a id="task1" href="#">
+        <a href="#">
+            <h2 class="titleTaskOnMainPage">
+
+
+            <fest:attributes>
+
+                <fest:attribute name="id">taskID:<fest:value>v.id</fest:value></fest:attribute>
+            </fest:attributes>
+
+
+            <fest:value> v.title </fest:value>  </h2></a>
+    </a>
+    <h3> Автор: <fest:value> v.orderLogin </fest:value> </h3>
+    <p><fest:value> v.text</fest:value></p>
+    <h3> Время: <fest:value> v.time </fest:value>  </h3>
+    <h3> Теги: <fest:value> v.tag </fest:value> </h3>
+</div>
+
+</fest:for>
+
+</fest:template>

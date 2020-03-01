@@ -1,5 +1,4 @@
 import {createProfile} from './createProfile.js';
-import {createOneTask} from './createOneTask.js';
 import {setLocation} from './setLocate.js';
 import {FetchRequests} from '../modules/fetchRequests.js';
 import {getRandomAvatarPath} from './createProfile.js';
@@ -32,7 +31,7 @@ export function showHeaderAndSideBar() {
 </header>
 <div class="main_content_and_side_bar">
     <div class="main_content">
-    основной контент страницы
+    загрузка...
     </div>
     <aside class="side_bar">
         <div class="leaders_table">
@@ -73,49 +72,9 @@ export function showHeaderAndSideBar() {
  * @return {void}
  */
 export function createMainPage() {
+  const tasksSize = 10;
+  FetchRequests.getTasks(tasksSize);
   setLocation('/index.html', 'Main');
   showHeaderAndSideBar();
-  const mainContent = document.getElementsByClassName('main_content')[0];
-  mainContent.innerHTML = `
-<div class="container">
-  <img class="avatarTask" src="assets/logoBadFront.png" alt="Avatar">
-  <a id="task1" href="#">
-  <p><span > task bubble sort O(n) .</span> </p> 
-  </a>
-  Gerald from Rivia.
-  <p>Task little text Task little text Task little text.</p>
-</div>
-<div class="container">
-  <img class="avatarTask" src="assets/logoBadFront.png" alt="Avatar">
-  <a id="task2" href="#">
-  <p><span > task bubble sort O(n) .</span> </p> 
-  </a>
-  Gerald from Rivia.
-  <p>Task little text Task little text Task little text.</p>
-</div>
-<div class="container">
-  <img class="avatarTask" src="assets/logoBadFront.png" alt="Avatar">
-  <a id="task3" href="#">
-  <p><span > task bubble sort O(n) .</span> </p> 
-  </a>
-  Gerald from Rivia.
-  <p>Task little text Task little text Task little text.</p>
-</div>
-`;
-  const task1 = document.getElementById('task1');
-  task1.addEventListener('click', function(e) {
-    e.preventDefault();
-    createOneTask();
-  });
-  const task2 = document.getElementById('task2');
-  task2.addEventListener('click', function(e) {
-    e.preventDefault();
-    createOneTask();
-  });
-  const task3 = document.getElementById('task3');
-  task3.addEventListener('click', function(e) {
-    e.preventDefault();
-    createOneTask();
-  });
 }
 

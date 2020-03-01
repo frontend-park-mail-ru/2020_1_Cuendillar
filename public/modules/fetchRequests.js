@@ -2,6 +2,7 @@ import {FetchModule} from './fetchLogic.js';
 import {serverLocate} from '../utils/constants.js';
 import {createLogin} from '../view/createLogin.js';
 import {createMainPage} from '../view/createMainPage.js';
+import {createOneTask} from '../view/createOneTask.js';
 
 /**
  *  Use logic FetchModule and work with promises
@@ -31,8 +32,12 @@ export class FetchRequests {
   static signInForm(fromForm) {
     FetchModule.fetchRequest({url: serverLocate + '/signin', body: fromForm})
         .then((res) => res.ok ? res : Promise.reject(res))
-        .then((response) =>
-          response.json(),
+        .then((response) => {
+          // @todo токен в глоабльную переменную и отправлять его вместе с запросами взаголовке +  go на вход
+          // globalThis.userData.token = response.ge("X-Csrf-Token");
+          // console.log("WE get:::", globalThis.userData.token);
+          return response.json();
+        },
         )
         .then((result) => {
           globalThis.userData.id = result.id;
@@ -136,6 +141,67 @@ export class FetchRequests {
         )
         .catch(function(error) {
           alert('Не удалось загрузить аватар.');
+        });
+  }
+
+
+  /**
+     *  get task (if server don't have numberoftask, we will get less)
+     *
+     * @param {int} numberoftask - ask of size task
+     * @return {void}
+     */
+  static getTasks(numberoftask) {
+    const body = {'numberoftask': numberoftask};
+    FetchModule.fetchRequest( {url: serverLocate + '/getTasks', body: body})
+        .then((res) => res.ok ? res : Promise.reject(res))
+        .then( (response) => response.json(),
+        )
+        .then((result) => {
+          const mainContent = document.getElementsByClassName('main_content')[0];
+          mainContent.innerHTML = window.fest['components/tasks.tmpl'](result);
+
+          // globalThis.MainPageTasks = result;
+
+          // set links to tasks
+          result.forEach( (item, i, arr) => {
+            const taskTitle = document.getElementById('taskID:'+item.id.toString());
+            taskTitle.addEventListener('click', (e) => {
+              e.preventDefault();
+
+              this.getOneTask(item.id);
+              createOneTask();
+            });
+          });
+        },
+        )
+        .catch(function(error) {
+          console.log('Не удалось получить задания!');
+        });
+  }
+
+  /**
+     *  get one task information by id
+     *
+     * @param {int} taskId - task id
+     * @return {void}
+     */
+  static getOneTask(taskId) {
+    const body = {'taskId': taskId};
+    FetchModule.fetchRequest( {url: serverLocate + '/getOneTask', body: body})
+        .then((res) => res.ok ? res : Promise.reject(res))
+        .then( (response) => response.json(),
+        )
+        .then((result) => {
+          console.log('RESULT ONE TASK:::', result);
+
+          const mainContent = document.getElementsByClassName('main_content')[0];
+
+          mainContent.innerHTML = window.fest['components/oneTask.tmpl'](result);
+        },
+        )
+        .catch(function(error) {
+          console.log('Не удалось получить конкретное задание!');
         });
   }
 }

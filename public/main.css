@@ -254,7 +254,7 @@ body, .page {
 .container {
     border: 2px solid #ccc;
     background-color: #eee;
-    border-radius: 5px;
+    border-radius: 15px;
     padding: 16px;
     margin: 16px 0;
 }
@@ -291,3 +291,6 @@ body, .page {
     }
 }
 
+.titleTaskOnMainPage {
+    display: inline-block;
+}

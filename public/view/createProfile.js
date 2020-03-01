@@ -16,7 +16,7 @@ export function getRandomAvatarPath(randomPartLength = 20) {
   for ( let i = 0; i < randomPartLength; i++ ) {
     random += characters.charAt(Math.floor(Math.random() * charactersLength));
   }
-  return serverLocate + '/getAvatar' + globalThis.userData.email + random;
+  return serverLocate + '/getAvatar' + globalThis.userData.login + random;
 }
 
 /**
@@ -29,6 +29,10 @@ export function getRandomAvatarPath(randomPartLength = 20) {
  */
 function checkProfileForm(email, password, passwordRep) {
   const minPasswordLength = 4;
+  // not change pass
+  if (password.length ===0 && passwordRep.length === 0) {
+    return true;
+  }
   if (password.length < minPasswordLength) {
     alert('Пароль должен содержать хотя бы 4 символа.');
     return false;
