@@ -90,5 +90,41 @@ export class FetchRequests {
                 createLogin();
             });
     }
+
+    static  SendUserAvatar(avatarData) {
+        FetchModule.fetchRequestSendAvatar( {url:serverLocate + "/sendAvatar", body: avatarData})
+            .then(res => res.ok ? res : Promise.reject(res))
+            .then( response => {
+                    console.log("Аватарка загрузилась!");
+                }
+            )
+            .catch(function (error) {
+                alert("Не удалось загрузить аватар.");
+            });
+    }
+
+
+    static  GetUserAvatar() {
+        FetchModule.fetchRequestGetAvatarFromServer( {url:serverLocate + "/getAvatar"})
+            .then(res => res.ok ? res : Promise.reject(res))
+            .then( response => response.text())
+                .then( rawResponse => {
+                // set avatar
+                console.log("BODY:::",rawResponse);
+                var b64Response = btoa(rawResponse);
+
+                var outputImg = document.createElement('img');
+                outputImg.src = 'data:image/png;'+b64Response;
+                document.body.appendChild(outputImg);
+                })
+
+            .catch(function (error) {
+                alert("Не удалось загрузить аватарку с сервера.");
+                console.log(error)
+            });
+    }
+
+
+
     
 }

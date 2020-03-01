@@ -2,6 +2,16 @@ import {createRegistration} from "./createRegistration.js"
 import {setLocation} from "./setLocate.js"
 import {FetchRequests} from "../modules/fetchRequests.js"
 
+function checkLoginInput(email, password) {
+    const minPasswordLength = 4;
+    if (length(password) < minPasswordLength) {
+        alert("Пароль должен содержать хотя бы 4 символа.");
+        return false;
+    }
+
+return true
+}
+
 export function createLogin() {
     console.log("CREATE LOGIN!");
     setLocation("/login.html", "Login");
@@ -49,6 +59,9 @@ export function createLogin() {
 
         const email = loginEmail.value.trim();
         const password = loginPassword.value.trim();
+
+        if (!checkLoginInput(email, password))
+            return;
 
         console.log("try send:", email, password);
 
