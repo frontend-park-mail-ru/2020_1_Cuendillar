@@ -1,3 +1,4 @@
+import {default as CurrentUser} from '../utils/userDataSingl.js';
 
 /**
  * Реализация транспортной логики
@@ -45,6 +46,7 @@ export class FetchModule {
       credentials: 'include',
       mode: 'cors',
       body: body,
+      headers: {'X-Csrf-Token': CurrentUser.Data.token},
     };
     return fetch(url, options);
   };

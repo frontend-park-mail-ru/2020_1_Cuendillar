@@ -2,6 +2,7 @@ import {showHeaderAndSideBar, createMainPage} from './createMainPage.js';
 import {setLocation} from './setLocate.js';
 import {FetchRequests} from '../modules/fetchRequests.js';
 import {serverLocate} from '../utils/constants.js';
+import {default as CurrentUser} from '../utils/userDataSingl.js';
 
 /**
  *  get random url for download avatar
@@ -16,7 +17,7 @@ export function getRandomAvatarPath(randomPartLength = 20) {
   for ( let i = 0; i < randomPartLength; i++ ) {
     random += characters.charAt(Math.floor(Math.random() * charactersLength));
   }
-  return serverLocate + '/getAvatar' + globalThis.userData.login + random;
+  return serverLocate + '/getAvatar' + random;
 }
 
 /**
@@ -54,7 +55,7 @@ export function createProfile() {
   setLocation('/profile.html', 'Profile');
   showHeaderAndSideBar();
   const avatarPath = getRandomAvatarPath();
-  console.log('MY RANDOM PARH:', avatarPath);
+
   const mainContent = document.getElementsByClassName('main_content')[0];
   mainContent.innerHTML = `
     <form   id = "profileForm" class="profile_form">
@@ -62,15 +63,18 @@ export function createProfile() {
                 <h2>Настройки профиля</h2>
             </header>
             <main>
-                <h3> Login:${globalThis.userData.login}</h3>
+                <h3> Login:${CurrentUser.Data.login}</h3>
                 <input id="profilePass" name="ProfPass" value="" type="password"  placeholder="Сменить пароль">
                 <input id="profilePassRep" name="repProfPass" value="" type="password"
                  placeholder="Повторите новый пароль">
-                <input id="profileEmail" type="email" value="${globalThis.userData.email}" placeholder="email">
+                <input id="profileEmail" type="email" value="${CurrentUser.Data.email}" placeholder="email">
             </main>
             <footer>
                 <button type="submit">Сохранить</button>
             </footer>
+            
+            <input  id="profileTextToken" hidden = true name="token" value="${CurrentUser.Data.token}">
+            
         </form>
         
         <form id = "profileFormAvatar" class="profile_form" enctype="multipart/form-data">
@@ -83,6 +87,9 @@ export function createProfile() {
               <input type="file" name="avatar">
          <button  type="submit">Сохранить аватар</button>
         </div>
+        
+         <input hidden = true name="token" value="${CurrentUser.Data.token}">
+        
 </form>
 `;
   const profileForm = document.getElementById('profileForm');
@@ -90,12 +97,15 @@ export function createProfile() {
   const profilePasswordRep = document.getElementById('profilePassRep');
   const profileEmail = document.getElementById('profileEmail');
 
+  const profileTextToken = document.getElementById('profileTextToken');
+
   profileForm.addEventListener('submit', function(e) {
     e.preventDefault();
 
     const password = profilePassword.value.trim();
     const passwordRep = profilePasswordRep.value.trim();
     const email = profileEmail.value.trim();
+    const TextToken = profileTextToken.value.trim();
 
     if (!checkProfileForm(email, password, passwordRep)) {
       return;
@@ -106,7 +116,7 @@ export function createProfile() {
     const fromForm = {};
     fromForm.password = password;
     fromForm.email = email;
-
+    fromForm.token = TextToken;
     FetchRequests.changeProfile(fromForm);
 
     createMainPage();

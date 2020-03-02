@@ -15,7 +15,6 @@ function checkLoginInput(email, password) {
     alert('Пароль должен содержать хотя бы 4 символа.');
     return false;
   }
-
   return true;
 }
 

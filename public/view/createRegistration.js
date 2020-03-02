@@ -22,6 +22,11 @@ function checkRegistrationForm(registrationLogin, registrationPassword,
     alert('Пароли должны совпадать.');
     return false;
   }
+  if (registrationLogin.length <= 4) {
+    alert('Минимальная длина логина 5 символов.');
+    return false;
+  }
+
   // @todo add check strong pass and registrationEmail
   return true;
 }

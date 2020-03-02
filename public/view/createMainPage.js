@@ -1,7 +1,7 @@
 import {createProfile} from './createProfile.js';
 import {setLocation} from './setLocate.js';
 import {FetchRequests} from '../modules/fetchRequests.js';
-import {getRandomAvatarPath} from './createProfile.js';
+import {default as CurrentUser} from '../utils/userDataSingl.js';
 
 /**
  *  show header
@@ -9,7 +9,7 @@ import {getRandomAvatarPath} from './createProfile.js';
  * @return {void}
  */
 export function showHeaderAndSideBar() {
-  const avatarPath = getRandomAvatarPath();
+  const avatarPath = CurrentUser.Data.avatarPath;
   application.innerHTML =`
 
     <header class="main_header">
@@ -23,7 +23,7 @@ export function showHeaderAndSideBar() {
     </div>
     
     <div class="header_profile_info">
-             <div class="login_in_header" href="#">${globalThis.userData.login}</div>
+             <div class="login_in_header" href="#">${CurrentUser.Data.login}</div>
             <img class="avatar_header" src="${avatarPath}">
         <a id="logoutLink" class="exit_link" href="#">Выйти</a>
     </div>
@@ -68,10 +68,13 @@ export function showHeaderAndSideBar() {
 
 /**
  *  show mainPage
- *
+ *@param {boolean} repaintHeader - need paint header? need for new avatar
  * @return {void}
  */
-export function createMainPage() {
+export function createMainPage(repaintHeader = false) {
+  if (repaintHeader) {
+    showHeaderAndSideBar();
+  }
   const tasksSize = 10;
   FetchRequests.getTasks(tasksSize);
   setLocation('/index.html', 'Main');

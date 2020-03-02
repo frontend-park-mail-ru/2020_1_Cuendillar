@@ -3,6 +3,8 @@ import {serverLocate} from '../utils/constants.js';
 import {createLogin} from '../view/createLogin.js';
 import {createMainPage} from '../view/createMainPage.js';
 import {createOneTask} from '../view/createOneTask.js';
+import {getRandomAvatarPath} from '../view/createProfile.js';
+import {default as CurrentUser} from '../utils/userDataSingl.js';
 
 /**
  *  Use logic FetchModule and work with promises
@@ -31,19 +33,22 @@ export class FetchRequests {
      */
   static signInForm(fromForm) {
     FetchModule.fetchRequest({url: serverLocate + '/signin', body: fromForm})
-        .then((res) => res.ok ? res : Promise.reject(res))
+        .then((res) => {
+          console.log('First:::', res);
+          return res.ok ? res : Promise.reject(res);
+        })
+
         .then((response) => {
           // @todo токен в глоабльную переменную и отправлять его вместе с запросами взаголовке +  go на вход
-          // globalThis.userData.token = response.ge("X-Csrf-Token");
-          // console.log("WE get:::", globalThis.userData.token);
           return response.json();
         },
         )
         .then((result) => {
-          globalThis.userData.id = result.id;
-          globalThis.userData.login = result.login;
-          globalThis.userData.email = result.email;
-          console.log('set GLOBAL USER LOGIN:', globalThis.userData.login);
+          CurrentUser.Data.token = result.token;
+          CurrentUser.Data.id = result.id;
+          CurrentUser.Data.login = result.login;
+          CurrentUser.Data.email = result.email;
+          CurrentUser.Data.avatarPath = getRandomAvatarPath();
           createMainPage();
         })
         .catch(function(error) {
@@ -62,9 +67,9 @@ export class FetchRequests {
     FetchModule.fetchRequest( {url: serverLocate + '/logout'})
         .then((res) => res.ok ? res : Promise.reject(res))
         .then( (response) => {
-          globalThis.userData.email = null;
-          globalThis.userData.login = null;
-          globalThis.userData.id = null;
+          CurrentUser.Data.email = null;
+          CurrentUser.Data.login = null;
+          CurrentUser.Data.id = null;
           createLogin();
         },
         )
@@ -87,11 +92,10 @@ export class FetchRequests {
           response.json(),
         )
         .then( (result) => {
-          globalThis.userData.id = result.id;
-          globalThis.userData.login = result.login;
-          globalThis.userData.email = result.email;
-          console.log('set GLOBAL USER LOGIN:', globalThis.userData.login);
-          createMainPage();
+          CurrentUser.Data.id = result.id;
+          CurrentUser.Data.login = result.login;
+          CurrentUser.Data.email = result.email;
+          createMainPage(true);
         })
         .catch(function(error) {
           alert('Не удалось изменить профиль.');
@@ -111,11 +115,11 @@ export class FetchRequests {
           response.json(),
         )
         .then( (result) => {
-          globalThis.userData.id = result.id;
-          globalThis.userData.login = result.login;
-          globalThis.userData.email = result.email;
-          if (createFunction === undefined) { // почему undefined ? если перезагружаюсь с index.html
-            console.log('err: why show page:', window.location.pathname);
+          CurrentUser.Data.id = result.id;
+          CurrentUser.Data.login = result.login;
+          CurrentUser.Data.email = result.email;
+          CurrentUser.Data.token = result.token;
+          if (createFunction === undefined) {
             createMainPage();
             return;
           }
@@ -136,7 +140,8 @@ export class FetchRequests {
     FetchModule.fetchRequestSendAvatar( {url: serverLocate + '/sendAvatar', body: avatarData})
         .then((res) => res.ok ? res : Promise.reject(res))
         .then( (response) => {
-          console.log('Аватарка загрузилась!');
+          CurrentUser.Data.avatarPath = getRandomAvatarPath();
+          createMainPage(true);
         },
         )
         .catch(function(error) {
@@ -160,8 +165,6 @@ export class FetchRequests {
         .then((result) => {
           const mainContent = document.getElementsByClassName('main_content')[0];
           mainContent.innerHTML = window.fest['components/tasks.tmpl'](result);
-
-          // globalThis.MainPageTasks = result;
 
           // set links to tasks
           result.forEach( (item, i, arr) => {
