@@ -7,7 +7,7 @@ import {getRandomAvatarPath} from "../view/createProfile.js";
 class UserDataCl {
      Data = {
         id: -1,
-        login: "",
+        login: "null",
         email: 'email',
         token: "",
         avatarPath: getRandomAvatarPath(),

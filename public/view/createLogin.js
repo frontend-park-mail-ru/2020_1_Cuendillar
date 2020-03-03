@@ -75,8 +75,6 @@ export function createLogin() {
       return;
     }
 
-    console.log('try send:', email, password);
-
     const fromForm = {};
     fromForm.email = email;
     fromForm.password = password;

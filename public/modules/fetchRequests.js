@@ -108,7 +108,7 @@ export class FetchRequests {
      * @param {function} createFunction -
      * @return {void}
      */
-  static getUserByCookie(createFunction) {
+  static getUserByCookie(createFunction = createMainPage) {
     FetchModule.fetchRequest( {url: serverLocate + '/getuser'})
         .then((res) => res.ok ? res : Promise.reject(res))
         .then( (response) =>
@@ -119,13 +119,10 @@ export class FetchRequests {
           CurrentUser.Data.login = result.login;
           CurrentUser.Data.email = result.email;
           CurrentUser.Data.token = result.token;
-          if (createFunction === undefined) {
-            createMainPage();
-            return;
-          }
           createFunction();
         })
         .catch(function(error) {
+          console.log('');
           createLogin();
         });
   }
@@ -196,10 +193,7 @@ export class FetchRequests {
         .then( (response) => response.json(),
         )
         .then((result) => {
-          console.log('RESULT ONE TASK:::', result);
-
           const mainContent = document.getElementsByClassName('main_content')[0];
-
           mainContent.innerHTML = window.fest['components/oneTask.tmpl'](result);
         },
         )

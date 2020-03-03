@@ -26,6 +26,10 @@ function checkRegistrationForm(registrationLogin, registrationPassword,
     alert('Минимальная длина логина 5 символов.');
     return false;
   }
+  if (registrationLogin === 'null') {
+    alert('login must != null');
+    return false;
+  }
 
   // @todo add check strong pass and registrationEmail
   return true;
