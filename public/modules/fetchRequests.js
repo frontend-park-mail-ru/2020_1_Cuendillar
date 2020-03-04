@@ -2,9 +2,11 @@ import {FetchModule} from './fetchLogic.js';
 import {serverLocate} from '../utils/constants.js';
 import {createLogin} from '../view/createLogin.js';
 import {createMainPage} from '../view/createMainPage.js';
-import {createOneTask} from '../view/createOneTask.js';
-import {getRandomAvatarPath} from '../view/createProfile.js';
+import {getRandomAvatarPath} from '../utils/randomPath.js';
 import {default as CurrentUser} from '../utils/userDataSingl.js';
+import {TasksComp} from '../components/tasksComp/tasks.js';
+import {OneTaskComp} from '../components/oneTaskComp/oneTask.js';
+import {createProfile} from '../view/createProfile.js';
 
 /**
  *  Use logic FetchModule and work with promises
@@ -21,7 +23,8 @@ export class FetchRequests {
         .then((res) => res.ok ? res : Promise.reject(res))
         .then( (response) => createLogin() )
         .catch(function(error) {
-          alert('Не удалось зарегистрироваться, пользователь с таким логином уже существует.');
+          const registrationErr = document.getElementById('registration_error_msg');
+          registrationErr.innerText = 'Не удалось зарегистрироваться, пользователь с таким логином уже существует.';
         });
   }
 
@@ -34,12 +37,9 @@ export class FetchRequests {
   static signInForm(fromForm) {
     FetchModule.fetchRequest({url: serverLocate + '/signin', body: fromForm})
         .then((res) => {
-          console.log('First:::', res);
           return res.ok ? res : Promise.reject(res);
         })
-
         .then((response) => {
-          // @todo токен в глоабльную переменную и отправлять его вместе с запросами взаголовке +  go на вход
           return response.json();
         },
         )
@@ -52,9 +52,9 @@ export class FetchRequests {
           createMainPage();
         })
         .catch(function(error) {
-          console.log('some signIN err');
-          alert('Не удалось авторизоваться, неверная комбинация почта-пароль.');
           createLogin();
+          const loginErr = document.getElementById('login_error_msg');
+          loginErr.innerText = 'Не удалось авторизоваться, неверная комбинация почта-пароль.';
         });
   }
 
@@ -73,8 +73,8 @@ export class FetchRequests {
           createLogin();
         },
         )
-        .catch(function(error) {
-          alert('logout err');
+        .catch((error) =>{
+          console.log('logOut err');
           createLogin();
         });
   }
@@ -95,10 +95,11 @@ export class FetchRequests {
           CurrentUser.Data.id = result.id;
           CurrentUser.Data.login = result.login;
           CurrentUser.Data.email = result.email;
-          createMainPage(true);
+          createProfile(true);
         })
-        .catch(function(error) {
-          alert('Не удалось изменить профиль.');
+        .catch((error) => {
+          const profileErr = document.getElementById('profile_error_msg');
+          profileErr.innerText = 'Не удалось изменить профиль.';
         });
   }
 
@@ -119,10 +120,10 @@ export class FetchRequests {
           CurrentUser.Data.login = result.login;
           CurrentUser.Data.email = result.email;
           CurrentUser.Data.token = result.token;
-          createFunction();
+          createFunction(true);
         })
-        .catch(function(error) {
-          console.log('');
+        .catch((error) =>{
+          console.log(error);
           createLogin();
         });
   }
@@ -134,15 +135,16 @@ export class FetchRequests {
      * @return {void}
      */
   static sendUserAvatar(avatarData) {
-    FetchModule.fetchRequestSendAvatar( {url: serverLocate + '/sendAvatar', body: avatarData})
+    FetchModule.fetchRequestSendImage( {url: serverLocate + '/sendAvatar', body: avatarData})
         .then((res) => res.ok ? res : Promise.reject(res))
         .then( (response) => {
           CurrentUser.Data.avatarPath = getRandomAvatarPath();
-          createMainPage(true);
+          createProfile(true);
         },
         )
-        .catch(function(error) {
-          alert('Не удалось загрузить аватар.');
+        .catch((error) =>{
+          const profileErr = document.getElementById('profile_error_msg');
+          profileErr.innerText = 'Не удалось загрузить аватар.';
         });
   }
 
@@ -160,22 +162,13 @@ export class FetchRequests {
         .then( (response) => response.json(),
         )
         .then((result) => {
-          const mainContent = document.getElementsByClassName('main_content')[0];
-          mainContent.innerHTML = window.fest['components/tasks.tmpl'](result);
-
-          // set links to tasks
-          result.forEach( (item, i, arr) => {
-            const taskTitle = document.getElementById('taskID:'+item.id.toString());
-            taskTitle.addEventListener('click', (e) => {
-              e.preventDefault();
-
-              this.getOneTask(item.id);
-              createOneTask();
-            });
-          });
+          // render tasks
+          const tasksComp = new TasksComp(result); // second param default
+          tasksComp.render();
         },
         )
-        .catch(function(error) {
+        .catch((error) =>{
+          console.log(error);
           console.log('Не удалось получить задания!');
         });
   }
@@ -193,12 +186,12 @@ export class FetchRequests {
         .then( (response) => response.json(),
         )
         .then((result) => {
-          const mainContent = document.getElementsByClassName('main_content')[0];
-          mainContent.innerHTML = window.fest['components/oneTask.tmpl'](result);
+          const oneTaskComp = new OneTaskComp(result, 'main_content');
+          oneTaskComp.render();
         },
         )
-        .catch(function(error) {
-          console.log('Не удалось получить конкретное задание!');
+        .catch((error) => {
+          console.log('Не удалось получить конкретное задание');
         });
   }
 }

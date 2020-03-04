@@ -13,21 +13,26 @@ import {FetchRequests} from '../modules/fetchRequests.js';
  */
 function checkRegistrationForm(registrationLogin, registrationPassword,
     registrationPasswordRep, registrationEmail) {
+  const registrationErr = document.getElementById('registration_error_msg');
   const minPasswordLength = 4;
   if ((registrationPassword.length) < minPasswordLength) {
-    alert('Пароль должен содержать хотя бы 4 символа.');
+    registrationErr.innerText = 'Пароль должен содержать хотя бы 4 символа.';
     return false;
   }
   if (registrationPassword !== registrationPasswordRep) {
-    alert('Пароли должны совпадать.');
+    registrationErr.innerText = 'Пароли должны совпадать.';
     return false;
   }
   if (registrationLogin.length <= 4) {
-    alert('Минимальная длина логина 5 символов.');
+    registrationErr.innerText = 'Минимальная длина логина 5 символов.';
     return false;
   }
   if (registrationLogin === 'null') {
-    alert('login must != null');
+    registrationErr.innerText = 'Логин != null';
+    return false;
+  }
+  if (registrationEmail.length < 3) {
+    registrationErr.innerText = 'Нужная нормальная почта';
     return false;
   }
 
@@ -41,7 +46,7 @@ function checkRegistrationForm(registrationLogin, registrationPassword,
  * @return {void}
  */
 export function createRegistration() {
-  setLocation('/registration.html', 'Registration');
+  setLocation('/registration.html', 'SignUp');
   application.innerHTML = `<div class="page">
     <header>
         <img class="littleLogo" src="assets/logoBadFront.png" alt="">
@@ -50,6 +55,7 @@ export function createRegistration() {
     <form id="registrationForm" class="registration_form form_regist_signin">
         <header>
             <h2>Регистрация</h2>
+             <h3 id="registration_error_msg" class="error_msg"></h3>
         </header>
 
         <main>

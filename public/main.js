@@ -15,7 +15,6 @@ const application = document.getElementById('application');
  * @return {void}
  */
 function getUserDataByCookieBeforeCreate(createFunction = createLogin) {
-  console.log('GET BU COOKIE', createFunction);
   FetchRequests.getUserByCookie(createFunction);
   application.innerHTML = 'Загрузка...';
 }
@@ -27,7 +26,6 @@ function getUserDataByCookieBeforeCreate(createFunction = createLogin) {
  */
 function showPage() {
   const url = window.location.pathname;
-  console.log(url);
   switch (url) {
     // @todo  add regular expr
     case '': {
@@ -51,18 +49,17 @@ function showPage() {
       break;
     }
     case '/login.html': {
-      console.log('GO TO LOGIN SWITCH');
-      if ( CurrentUser.Data.login !== 'null') {
-        getUserDataByCookieBeforeCreate(createMainPage);
-        console.log('BAD BAD BAD');
-        break;
+      console.log("LOGIN",CurrentUser.Data.login);
+      if ( CurrentUser.Data.login === 'null') {
+        console.log("good");
+        createLogin();
+        return;
       }
-
-      createLogin();
+      getUserDataByCookieBeforeCreate(createMainPage);
       return;
+
     }
     case '/profile.html': {
-      console.log('profile call!');
       getUserDataByCookieBeforeCreate(createProfile);
       break;
     }

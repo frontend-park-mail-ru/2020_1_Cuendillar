@@ -1,24 +1,8 @@
-import {showHeaderAndSideBar, createMainPage} from './createMainPage.js';
+import {showHeaderAndSideBar} from './createMainPage.js';
 import {setLocation} from './setLocate.js';
 import {FetchRequests} from '../modules/fetchRequests.js';
-import {serverLocate} from '../utils/constants.js';
 import {default as CurrentUser} from '../utils/userDataSingl.js';
-
-/**
- *  get random url for download avatar
- *
- * @param {int} randomPartLength - length of randomPart
- * @return {string}
- */
-export function getRandomAvatarPath(randomPartLength = 20) {
-  let random = '';
-  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-  const charactersLength = characters.length;
-  for ( let i = 0; i < randomPartLength; i++ ) {
-    random += characters.charAt(Math.floor(Math.random() * charactersLength));
-  }
-  return serverLocate + '/getAvatar' + random;
-}
+import {getRandomAvatarPath} from '../utils/randomPath.js';
 
 /**
  *  check profile form
@@ -30,16 +14,16 @@ export function getRandomAvatarPath(randomPartLength = 20) {
  */
 function checkProfileForm(email, password, passwordRep) {
   const minPasswordLength = 4;
-  // not change pass
+  const ProfileErr = document.getElementById('profile_error_msg');
   if (password.length ===0 && passwordRep.length === 0) {
     return true;
   }
   if (password.length < minPasswordLength) {
-    alert('Пароль должен содержать хотя бы 4 символа.');
+    ProfileErr.innerText = 'Пароль должен содержать хотя бы 4 символа.';
     return false;
   }
   if (password !== passwordRep) {
-    alert('Пароли должны совпадать.');
+    ProfileErr.innerText = 'Пароли должны совпадать.';
     return false;
   }
   // toDo add check string password
@@ -49,11 +33,16 @@ function checkProfileForm(email, password, passwordRep) {
 /**
  *  create profile page
  *
+ * @param {boolean} repaintHeader - do we need repaint?
  * @return {void}
  */
-export function createProfile() {
+export function createProfile(repaintHeader = false) {
   setLocation('/profile.html', 'Profile');
-  showHeaderAndSideBar();
+
+  if (repaintHeader) {
+    showHeaderAndSideBar();
+  }
+
   const avatarPath = getRandomAvatarPath();
 
   const mainContent = document.getElementsByClassName('main_content')[0];
@@ -61,6 +50,7 @@ export function createProfile() {
     <form   id = "profileForm" class="profile_form">
             <header>
                 <h2>Настройки профиля</h2>
+                <h3 id="profile_error_msg" class="error_msg"></h3>
             </header>
             <main>
                 <h3> Login:${CurrentUser.Data.login}</h3>
@@ -105,21 +95,17 @@ export function createProfile() {
     const password = profilePassword.value.trim();
     const passwordRep = profilePasswordRep.value.trim();
     const email = profileEmail.value.trim();
-    const TextToken = profileTextToken.value.trim();
+    const textToken = profileTextToken.value.trim();
 
     if (!checkProfileForm(email, password, passwordRep)) {
       return;
     }
 
-    console.log('profile: try send:', password, email);
-
     const fromForm = {};
     fromForm.password = password;
     fromForm.email = email;
-    fromForm.token = TextToken;
+    fromForm.token = textToken;
     FetchRequests.changeProfile(fromForm);
-
-    createMainPage();
   });
 
   const profileFormAvatar = document.getElementById('profileFormAvatar');
@@ -129,6 +115,5 @@ export function createProfile() {
     const avatar = new FormData(profileFormAvatar);
 
     FetchRequests.sendUserAvatar(avatar);
-    createMainPage();
   });
 }

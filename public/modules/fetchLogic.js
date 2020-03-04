@@ -37,7 +37,7 @@ export class FetchModule {
    * @param {map} parameters - parameters for fetch
    * @return {promise}
    */
-  static fetchRequestSendAvatar({url,
+  static fetchRequestSendImage({url,
     method = 'post',
     body = null,
   } = {}) {

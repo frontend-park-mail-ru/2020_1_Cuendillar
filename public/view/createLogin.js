@@ -12,7 +12,8 @@ import {FetchRequests} from '../modules/fetchRequests.js';
 function checkLoginInput(email, password) {
   const minPasswordLength = 4;
   if ((password.length) < minPasswordLength) {
-    alert('Пароль должен содержать хотя бы 4 символа.');
+    const loginErr = document.getElementById('login_error_msg');
+    loginErr.innerText = 'У нас все пароли > 4';
     return false;
   }
   return true;
@@ -24,16 +25,17 @@ function checkLoginInput(email, password) {
  * @return {void}
  */
 export function createLogin() {
-  console.log('CREATE LOGIN!');
   setLocation('/login.html', 'Login');
   application.innerHTML =`
 <div class="page">
     <header>
         <img class="mainLogo" src="assets/logoBadFront.png" alt="">
+  
     </header>
     <form  id="loginForm" class="wrapper__form form_regist_signin">
         <header>
             <h2>Авторизация</h2>
+                  <h3 id="login_error_msg" class="error_msg"></h3>
         </header>
         <main>
             <input id="loginEmail" type="email" placeholder="Почта">
@@ -81,7 +83,7 @@ export function createLogin() {
 
     FetchRequests.signInForm(fromForm);
 
-    application.innerHTML =' Загрузка... ';
+    application.innerHTML = ' Загрузка... ';
   });
 }
 

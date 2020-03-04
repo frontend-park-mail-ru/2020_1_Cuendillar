@@ -1,4 +1,4 @@
-import {getRandomAvatarPath} from "../view/createProfile.js";
+import {getRandomAvatarPath} from './randomPath.js'
 
 /**
  *  user data singleton

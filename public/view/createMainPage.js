@@ -1,7 +1,8 @@
 import {createProfile} from './createProfile.js';
 import {setLocation} from './setLocate.js';
 import {FetchRequests} from '../modules/fetchRequests.js';
-import {default as CurrentUser} from '../utils/userDataSingl.js';
+import {SideBar} from '../components/sideBar/sideBar.js';
+import {HeaderComp} from '../components/headerComp/header.js';
 
 /**
  *  show header
@@ -9,44 +10,25 @@ import {default as CurrentUser} from '../utils/userDataSingl.js';
  * @return {void}
  */
 export function showHeaderAndSideBar() {
-  const avatarPath = CurrentUser.Data.avatarPath;
-  application.innerHTML =`
+  const headerComp = new HeaderComp('application');
+  headerComp.render();
 
-    <header class="main_header">
-   
-    <div class="header_links">
-     <h2 class="header_siteName">Cuendillar</h2>
-        <a id="linkMainPage" class="header_one_link" href="index.html">Главная</a>
-        <a id="profileMainLink" class="header_one_link" href="profile.html">Профиль</a>
-        <a class="header_one_link" href="#">Что-то еще</a>
-        <a class="header_one_link" href="#">И еще что-то</a>
-    </div>
-    
-    <div class="header_profile_info">
-             <div class="login_in_header" href="#">${CurrentUser.Data.login}</div>
-            <img class="avatar_header" src="${avatarPath}">
-        <a id="logoutLink" class="exit_link" href="#">Выйти</a>
-    </div>
-    
-</header>
+  // set struct of main page
+  application.innerHTML += `
 <div class="main_content_and_side_bar">
     <div class="main_content">
     загрузка...
     </div>
+    
+
     <aside class="side_bar">
-        <div class="leaders_table">
-            <h2> Лидеры </h2>
-            <h4> 1 место логин</h4>
-            <h4> 2 место логин</h4>
-            <h4> 3 место логин</h4>
-            <h4> 4 место логин</h4>
-            <h4> 5 место логин</h4>
-        </div>
-        <div>
-            Может быть какие-то новости
-        </div>
     </aside>
-    `;
+
+    
+</div>`;
+
+  const sideBar = new SideBar(); // use default value
+  sideBar.render();
 
   const linkMainPage = document.getElementById('linkMainPage');
   linkMainPage.addEventListener('click', function(e) {
@@ -75,9 +57,10 @@ export function createMainPage(repaintHeader = false) {
   if (repaintHeader) {
     showHeaderAndSideBar();
   }
-  const tasksSize = 10;
-  FetchRequests.getTasks(tasksSize);
+
   setLocation('/index.html', 'Main');
   showHeaderAndSideBar();
+  const tasksSize = 10;
+  FetchRequests.getTasks(tasksSize);
 }
 

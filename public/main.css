@@ -1,3 +1,7 @@
+@import url('/components/tasksComp/tasks.css');
+@import url('/components/oneTaskComp/oneTask.css');
+@import url('/components/sideBar/sideBar.css');
+@import url('/components/headerComp/header.css');
 
 .mainLogo {
     padding-top: 10%;
@@ -19,58 +23,6 @@
 }
 
 
-.main_header {
-    background: #e5e4e1;
-    margin-top: 5px;
-    margin-left: 15px;
-    margin-right: 15px;
-    padding-bottom: 5px;
-    border-radius: 10px;
-}
-
-.header_siteName {
-    font-size: 30px;
-    margin-left: 15px;
-}
-
-.header_links {
-    margin: 10px;
-    display: inline-block;
-}
-
-.header_profile_info {
-    display: inline-block;
-    float: right;
-    margin-right: 30px;
-    margin-top: 10px;
-    /*margin-left: 200px; */
-}
-
-.avatar_header {
-    border-radius: 4px;
-    border: 1px solid #ddd;
-    width: 100px;
-    height: 100px;
-    margin-left: 20px;
-}
-
-.login_in_header {
-    font-size:  23px;;
-    display: inline-block;
-    color: darkslategrey;
-}
-
-.header_one_link {
-    font-size: 20px;
-    margin-left: 20px;
-    margin-right: 40px;
-    border: 25px;
-}
-
-.exit_link {
-    font-size: 20px;
-    padding-left: 50px;
-}
 
 .main_content_and_side_bar {
     display: flex;
@@ -84,20 +36,6 @@
     border-radius: 10px;
     padding: 20px;
     background: #e6f1ef;
-}
-
-.side_bar {
-    background: #e6f1ef;
-    border-radius: 10px;
-    width: 20%;
-    float: right;
-    margin-left: 7px;
-    text-align: center;
-}
-
-.leaders_table{
-    display: block;
-
 }
 
 button {
@@ -246,51 +184,6 @@ body, .page {
     width: 500px;
 }
 
-.avatarTask {
-    width:90px;
-}
-
-
-.container {
-    border: 2px solid #ccc;
-    background-color: #eee;
-    border-radius: 15px;
-    padding: 16px;
-    margin: 16px 0;
-}
-
-/* Clear floats after containers */
-.container::after {
-    content: "";
-    clear: both;
-    display: table;
-}
-
-
-.container img {
-    float: left;
-    margin-right: 20px;
-    border-radius: 50%;
-}
-
-
-.container span {
-    font-size: 20px;
-    margin-right: 15px;
-}
-
-
-@media (max-width: 500px) {
-    .container {
-        text-align: center;
-    }
-    .container img {
-        margin: auto;
-        float: none;
-        display: block;
-    }
-}
-
-.titleTaskOnMainPage {
-    display: inline-block;
+.error_msg {
+    color: red;
 }

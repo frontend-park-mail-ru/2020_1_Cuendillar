@@ -1,0 +1,13 @@
+
+.side_bar {
+    background: #e6f1ef;
+    border-radius: 10px;
+    width: 20%;
+    float: right;
+    margin-left: 7px;
+    text-align: center;
+}
+
+.leaders_table{
+    display: block;
+}
