@@ -1,4 +1,4 @@
-import {default as CurrentUser} from '../../utils/userDataSingl.js';
+import {default as CurrentUser} from '../../modules/userDataSingl.js';
 
 /**
  *  component header
@@ -12,6 +12,8 @@ export class HeaderComp {
    */
   constructor(idApp = 'application' ) {
     this.idApp = document.getElementById(idApp);
+    this.login = CurrentUser.Data.login;
+    this.avatarPath = CurrentUser.Data.avatarPath;
   }
 
   /**
@@ -33,8 +35,8 @@ export class HeaderComp {
     </div>
     
     <div class="header_profile_info">
-             <div class="login_in_header" href="#">${CurrentUser.Data.login}</div>
-            <img class="avatar_header" src="${CurrentUser.Data.avatarPath}">
+             <div class="login_in_header" href="#">${this.login}</div>
+            <img class="avatar_header" src="${this.avatarPath}">
         <a id="logoutLink" class="exit_link" href="#">Выйти</a>
     </div>
     

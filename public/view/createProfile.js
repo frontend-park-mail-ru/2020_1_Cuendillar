@@ -1,7 +1,7 @@
 import {showHeaderAndSideBar} from './createMainPage.js';
 import {setLocation} from './setLocate.js';
 import {FetchRequests} from '../modules/fetchRequests.js';
-import {default as CurrentUser} from '../utils/userDataSingl.js';
+import {default as CurrentUser} from '../modules/userDataSingl.js';
 import {getRandomAvatarPath} from '../utils/randomPath.js';
 
 /**

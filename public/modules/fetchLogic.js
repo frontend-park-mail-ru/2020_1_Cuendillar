@@ -1,4 +1,4 @@
-import {default as CurrentUser} from '../utils/userDataSingl.js';
+import {default as CurrentUser} from './userDataSingl.js';
 
 /**
  * Реализация транспортной логики

@@ -3,7 +3,7 @@ import {createRegistration} from './view/createRegistration.js';
 import {createMainPage} from './view/createMainPage.js';
 import {createProfile} from './view/createProfile.js';
 import {FetchRequests} from './modules/fetchRequests.js';
-import {default as CurrentUser} from './utils/userDataSingl.js'; // не засоряем глобальную область
+import {default as CurrentUser} from './modules/userDataSingl.js';
 
 
 const application = document.getElementById('application');
@@ -49,15 +49,12 @@ function showPage() {
       break;
     }
     case '/login.html': {
-      console.log("LOGIN",CurrentUser.Data.login);
       if ( CurrentUser.Data.login === 'null') {
-        console.log("good");
         createLogin();
         return;
       }
       getUserDataByCookieBeforeCreate(createMainPage);
       return;
-
     }
     case '/profile.html': {
       getUserDataByCookieBeforeCreate(createProfile);

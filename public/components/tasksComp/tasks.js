@@ -1,6 +1,5 @@
 import {FetchRequests} from '../../modules/fetchRequests.js';
 import {setLocation} from '../../view/setLocate.js';
-import {showHeaderAndSideBar} from '../../view/createMainPage.js';
 
 /**
  *  component tasks (list of tasks)
@@ -34,7 +33,6 @@ export class TasksComp {
 
         FetchRequests.getOneTask(item.id);
         setLocation('/onetask.html', 'Task');
-        showHeaderAndSideBar();
       });
     });
   }

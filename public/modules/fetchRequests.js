@@ -3,10 +3,10 @@ import {serverLocate} from '../utils/constants.js';
 import {createLogin} from '../view/createLogin.js';
 import {createMainPage} from '../view/createMainPage.js';
 import {getRandomAvatarPath} from '../utils/randomPath.js';
-import {default as CurrentUser} from '../utils/userDataSingl.js';
+import {default as CurrentUser} from './userDataSingl.js';
 import {TasksComp} from '../components/tasksComp/tasks.js';
-import {OneTaskComp} from '../components/oneTaskComp/oneTask.js';
 import {createProfile} from '../view/createProfile.js';
+import {createOneTask} from '../view/createOneTask.js';
 
 /**
  *  Use logic FetchModule and work with promises
@@ -21,7 +21,7 @@ export class FetchRequests {
   static registrationForm(fromForm) {
     FetchModule.fetchRequest( {url: serverLocate + '/registration', body: fromForm})
         .then((res) => res.ok ? res : Promise.reject(res))
-        .then( (response) => createLogin() )
+        .then(res =>  createLogin())
         .catch(function(error) {
           const registrationErr = document.getElementById('registration_error_msg');
           registrationErr.innerText = 'Не удалось зарегистрироваться, пользователь с таким логином уже существует.';
@@ -186,8 +186,7 @@ export class FetchRequests {
         .then( (response) => response.json(),
         )
         .then((result) => {
-          const oneTaskComp = new OneTaskComp(result, 'main_content');
-          oneTaskComp.render();
+          createOneTask(result);
         },
         )
         .catch((error) => {

@@ -1,4 +1,4 @@
-import {getRandomAvatarPath} from './randomPath.js'
+import {getRandomAvatarPath} from '../utils/randomPath.js'
 
 /**
  *  user data singleton
@@ -11,7 +11,6 @@ class UserDataCl {
         email: 'email',
         token: "",
         avatarPath: getRandomAvatarPath(),
-        token2: "",
     };
 
 }
