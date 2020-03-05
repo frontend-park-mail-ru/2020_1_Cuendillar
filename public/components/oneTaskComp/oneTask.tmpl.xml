@@ -1,0 +1,17 @@
+<fest:template xmlns:fest="http://fest.mail.ru" context_name="data">
+
+    <div class="container">
+        <img class="avatarTask" src="assets/logoBadFront.png" alt="Avatar"> </img>
+
+                <h2 class="titleTaskOnMainPage">
+                    <fest:value> data.title </fest:value>
+                </h2>
+
+        <h3> Автор: <fest:value> data.orderLogin </fest:value> </h3>
+        <p><fest:value> data.text</fest:value></p>
+        <h3> Время: <fest:value> data.time </fest:value>  </h3>
+        <h3> Теги: <fest:value> data.tag </fest:value> </h3>
+    </div>
+
+
+</fest:template>
