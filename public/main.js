@@ -36,11 +36,11 @@ function showPage() {
       getUserDataByCookieBeforeCreate(createMainPage);
       break;
     }
-    case '/index.html': {
+    case '/main': {
       getUserDataByCookieBeforeCreate(createMainPage);
       break;
     }
-    case '/registration.html': {
+    case '/registration': {
       if ( CurrentUser.Data.login !== ''|| CurrentUser.Data.login != null) {
         getUserDataByCookieBeforeCreate(createMainPage);
         break;
@@ -48,7 +48,7 @@ function showPage() {
       createRegistration();
       break;
     }
-    case '/login.html': {
+    case '/login': {
       if ( CurrentUser.Data.login === 'null') {
         createLogin();
         return;
@@ -56,7 +56,7 @@ function showPage() {
       getUserDataByCookieBeforeCreate(createMainPage);
       return;
     }
-    case '/profile.html': {
+    case '/profile': {
       getUserDataByCookieBeforeCreate(createProfile);
       break;
     }

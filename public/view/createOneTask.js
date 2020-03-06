@@ -12,6 +12,5 @@ export function createOneTask(dataForOneTask) {
   showHeaderAndSideBar();
   const oneTaskComp = new OneTaskComp(dataForOneTask, 'main_content');
   oneTaskComp.render();
-  setLocation('/onetask.html', 'Task');
-  // showHeaderAndSideBar();
+  setLocation('/onetask', 'Task');
 }

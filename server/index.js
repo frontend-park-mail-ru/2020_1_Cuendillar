@@ -1,51 +1,17 @@
-const http = require("http");
 var path = require('path');
-const fs = require("fs");
+const express = require('express');
+const app = express();
 
-const server = http.createServer((req,res) => {
+const host = '127.0.0.1';
+const port = 3000;
 
-    console.log("url:", req.url);
+app.use(express.static(`${__dirname}` + "../../public"));
 
-    var fileName = req.url === "/" ? req.url + "index.html" : req.url;
-
-    var extname = path.extname(fileName);
-    var contentType = 'text/html';
-    switch (extname) {
-        case '.js':
-            contentType = 'text/javascript';
-            break;
-        case '.css':
-            contentType = 'text/css';
-            break;
-        case '.json':
-            contentType = 'application/json';
-            break;
-        case '.png':
-            contentType = 'image/png';
-            break;
-        case '.jpg':
-            contentType = 'image/jpg';
-            break;
-    }
-
-    if (contentType === 'text/html') { // SPA
-        fileName = "index.html"
-    }
-
-    fs.readFile("public/"+fileName, (err, body) =>{
-
-        if (err) {
-            console.log("ERROR 404");
-            res.writeHead(404, { 'Content-Type': contentType });
-            res.end();
-            return;
-        }
-
-        res.writeHead(200, { 'Content-Type': contentType });
-        res.write(body);
-        res.end();
-    });
-
+app.get('/*/', function(req, res) {
+    res.sendFile(path.resolve(`${__dirname}` + "../../public/index.html"))
 });
 
-server.listen(3000);
+
+app.listen(port, host, function () {
+    console.log(`Server listens http://${host}:${port}`);
+});

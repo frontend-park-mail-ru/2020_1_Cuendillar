@@ -3,6 +3,7 @@ import {setLocation} from './setLocate.js';
 import {FetchRequests} from '../modules/fetchRequests.js';
 import {default as CurrentUser} from '../modules/userDataSingl.js';
 import {getRandomAvatarPath} from '../utils/randomPath.js';
+import {ErrMsg} from '../components/errorMsg/errMsg.js';
 
 /**
  *  check profile form
@@ -14,16 +15,18 @@ import {getRandomAvatarPath} from '../utils/randomPath.js';
  */
 function checkProfileForm(email, password, passwordRep) {
   const minPasswordLength = 4;
-  const ProfileErr = document.getElementById('profile_error_msg');
+
   if (password.length ===0 && passwordRep.length === 0) {
     return true;
   }
   if (password.length < minPasswordLength) {
-    ProfileErr.innerText = 'Пароль должен содержать хотя бы 4 символа.';
+    const err = new ErrMsg('Пароль должен содержать хотя бы 4 символа.', 'profile_error_msg');
+    err.render();
     return false;
   }
   if (password !== passwordRep) {
-    ProfileErr.innerText = 'Пароли должны совпадать.';
+    const err = new ErrMsg('Пароли должны совпадать.', 'profile_error_msg');
+    err.render();
     return false;
   }
   // toDo add check string password
@@ -37,7 +40,7 @@ function checkProfileForm(email, password, passwordRep) {
  * @return {void}
  */
 export function createProfile(repaintHeader = false) {
-  setLocation('/profile.html', 'Profile');
+  setLocation('/profile', 'Profile');
 
   if (repaintHeader) {
     showHeaderAndSideBar();
@@ -50,7 +53,8 @@ export function createProfile(repaintHeader = false) {
     <form   id = "profileForm" class="profile_form">
             <header>
                 <h2>Настройки профиля</h2>
-                <h3 id="profile_error_msg" class="error_msg"></h3>
+                <div id = "profile_error_msg"></div>
+                
             </header>
             <main>
                 <h3> Login:${CurrentUser.Data.login}</h3>
@@ -70,12 +74,13 @@ export function createProfile(repaintHeader = false) {
         <form id = "profileFormAvatar" class="profile_form" enctype="multipart/form-data">
         <header>
                <h2>Изменение аватара</h2>
+               <div id = "profile_error_msg_avatar"></div>
             </header>
               <img class="profile_avatar" src="${avatarPath}">
             
               <div>
-              <input type="file" name="avatar">
-         <button  type="submit">Сохранить аватар</button>
+              <input type="file" name="avatar" type="submit">
+        
         </div>
         
          <input hidden = true name="token" value="${CurrentUser.Data.token}">
@@ -109,9 +114,8 @@ export function createProfile(repaintHeader = false) {
   });
 
   const profileFormAvatar = document.getElementById('profileFormAvatar');
-  profileFormAvatar.addEventListener('submit', function(e) {
+  profileFormAvatar.addEventListener('change', function(e) {
     e.preventDefault();
-
     const avatar = new FormData(profileFormAvatar);
 
     FetchRequests.sendUserAvatar(avatar);

@@ -25,7 +25,7 @@ function checkLoginInput(email, password) {
  * @return {void}
  */
 export function createLogin() {
-  setLocation('/login.html', 'Login');
+  setLocation('/login', 'Login');
   application.innerHTML =`
 <div class="page">
     <header>
@@ -87,7 +87,7 @@ export function createLogin() {
 
     FetchRequests.signInForm(fromForm);
 
-    application.innerHTML = ' Загрузка... ';
+    // application.innerHTML = ' Загрузка... ';
   });
 }
 
