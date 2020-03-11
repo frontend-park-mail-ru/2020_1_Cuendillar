@@ -7,6 +7,7 @@ import {default as CurrentUser} from './userDataSingl.js';
 import {TasksComp} from '../components/tasksComp/tasks.js';
 import {createProfile} from '../view/createProfile.js';
 import {createOneTask} from '../view/createOneTask.js';
+import {ErrMsg} from '../components/errorMsg/errMsg.js';
 
 /**
  *  Use logic FetchModule and work with promises
@@ -21,7 +22,7 @@ export class FetchRequests {
   static registrationForm(fromForm) {
     FetchModule.fetchRequest( {url: serverLocate + '/registration', body: fromForm})
         .then((res) => res.ok ? res : Promise.reject(res))
-        .then(res =>  createLogin())
+        .then((res) => createLogin())
         .catch(function(error) {
           const registrationErr = document.getElementById('registration_error_msg');
           registrationErr.innerText = 'Не удалось зарегистрироваться, пользователь с таким логином уже существует.';
@@ -98,8 +99,8 @@ export class FetchRequests {
           createProfile(true);
         })
         .catch((error) => {
-          const profileErr = document.getElementById('profile_error_msg');
-          profileErr.innerText = 'Не удалось изменить профиль.';
+          const err = new ErrMsg('Не удалось изменить профиль.', 'profile_error_msg');
+          err.render();
         });
   }
 
@@ -143,8 +144,8 @@ export class FetchRequests {
         },
         )
         .catch((error) =>{
-          const profileErr = document.getElementById('profile_error_msg');
-          profileErr.innerText = 'Не удалось загрузить аватар.';
+          const err = new ErrMsg('Не удалось загрузить аватар.', 'profile_error_msg_avatar');
+          err.render();
         });
   }
 

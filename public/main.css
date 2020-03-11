@@ -2,6 +2,7 @@
 @import url('/components/oneTaskComp/oneTask.css');
 @import url('/components/sideBar/sideBar.css');
 @import url('/components/headerComp/header.css');
+@import url('/components/errorMsg/errMsg.css');
 
 .mainLogo {
     padding-top: 10%;
@@ -171,6 +172,7 @@ body, .page {
 .profile_avatar {
     height: 150px;
     width: 150px;
+    object-fit: cover
 }
 
 .profile_form {
@@ -184,6 +186,3 @@ body, .page {
     width: 500px;
 }
 
-.error_msg {
-    color: red;
-}

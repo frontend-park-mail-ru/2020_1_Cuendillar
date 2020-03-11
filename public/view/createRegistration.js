@@ -46,7 +46,7 @@ function checkRegistrationForm(registrationLogin, registrationPassword,
  * @return {void}
  */
 export function createRegistration() {
-  setLocation('/registration.html', 'SignUp');
+  setLocation('/registration', 'SignUp');
   application.innerHTML = `<div class="page">
     <header>
         <img class="littleLogo" src="assets/logoBadFront.png" alt="">

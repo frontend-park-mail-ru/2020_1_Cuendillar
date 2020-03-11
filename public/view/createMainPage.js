@@ -17,7 +17,6 @@ export function showHeaderAndSideBar() {
   application.innerHTML += `
 <div class="main_content_and_side_bar">
     <div class="main_content">
-    загрузка...
     </div>
     
 
@@ -58,7 +57,7 @@ export function createMainPage(repaintHeader = false) {
     showHeaderAndSideBar();
   }
 
-  setLocation('/index.html', 'Main');
+  setLocation('/main', 'Main');
   showHeaderAndSideBar();
   const tasksSize = 10;
   FetchRequests.getTasks(tasksSize);
